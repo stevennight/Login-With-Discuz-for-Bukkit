@@ -2,8 +2,6 @@ package cn.sevaft.plugins.minecraft.loginwithdiscuz.main;
 
 import java.util.Date;
 
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,6 +13,7 @@ import org.bukkit.event.player.*;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import cn.sevaft.plugins.minecraft.loginwithdiscuz.function.Common;
 import cn.sevaft.plugins.minecraft.loginwithdiscuz.task.KickPlayerTask;
 import cn.sevaft.plugins.minecraft.loginwithdiscuz.task.TipsLogin;
 
@@ -83,14 +82,7 @@ public class Event implements Listener {
     	//¹Ì¶¨µÇÂ¼Î»ÖÃ¡£
     	boolean openloginpoint = this.plugin.getConfig().getBoolean("config.loginpoint.open");
     	if(openloginpoint){
-    		World world = this.plugin.getServer().getWorld(this.plugin.getConfig().getString("config.loginpoint.world"));
-    		Location loc = new Location(world,
-    				this.plugin.getConfig().getDouble("config.loginpoint.posx"),
-    				this.plugin.getConfig().getDouble("config.loginpoint.posy"),
-    				this.plugin.getConfig().getDouble("config.loginpoint.posz"),
-    				(float)this.plugin.getConfig().getDouble("config.loginpoint.posyaw"),
-    				(float)this.plugin.getConfig().getDouble("config.loginpoint.pospitch"));
-    		player.teleport(loc);
+    		player.teleport(Common.getLoginPos(this.plugin,player));
     	}
     	
     	//³¬Ê±µÇÂ¼Ìß³öÍæ¼Ò
@@ -140,7 +132,7 @@ public class Event implements Listener {
     	Player player = event.getPlayer();
     	String[] args = event.getMessage().split(" ");
     	if(!Loginwithdiscuz.loginuser.containsKey(player.getName())||!Loginwithdiscuz.loginuser.get(player.getName())){
-    		if(args[0].equals("/login")||args[0].equals("/logout")){
+    		if(args[0].equals("/login")||args[0].equals("/logout")||args[0].equals("/lwd")){
     			
     		}else{
     			event.setCancelled(true);

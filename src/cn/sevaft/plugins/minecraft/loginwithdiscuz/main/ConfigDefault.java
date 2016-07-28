@@ -25,28 +25,29 @@ public class ConfigDefault {
 		if(!plugin.getConfig().isSet("config.loginpoint.open")){
 			plugin.getConfig().set("config.loginpoint.open", false);
 		}
-		if(!plugin.getConfig().isSet("config.loginpoint.world")){
+		String world=null;
 			Iterator<World> worlds = plugin.getServer().getWorlds().iterator();
-			String world=null;
+			
 			if(worlds.hasNext()){
 				world = worlds.next().getName();
 			}
-			plugin.getConfig().set("config.loginpoint.world",world);
+		if(!plugin.getConfig().isSet("config.loginpoint.defaultworld")){
+			plugin.getConfig().set("config.loginpoint.defaultworld",world);
 		}
-		if(!plugin.getConfig().isSet("config.loginpoint.posx")){
-			plugin.getConfig().set("config.loginpoint.posx", 0.0);
+		if(!plugin.getConfig().isSet("config.loginpoint."+world+".posx")){
+			plugin.getConfig().set("config.loginpoint."+world+".posx", 0.0);
 		}
-		if(!plugin.getConfig().isSet("config.loginpoint.posy")){
-			plugin.getConfig().set("config.loginpoint.posy", 80.0);
+		if(!plugin.getConfig().isSet("config.loginpoint."+world+".posy")){
+			plugin.getConfig().set("config.loginpoint."+world+".posy", 80.0);
 		}
-		if(!plugin.getConfig().isSet("config.loginpoint.posz")){
-			plugin.getConfig().set("config.loginpoint.posz", 0.0);
+		if(!plugin.getConfig().isSet("config.loginpoint."+world+".posz")){
+			plugin.getConfig().set("config.loginpoint."+world+".posz", 0.0);
 		}
-		if(!plugin.getConfig().isSet("config.loginpoint.posyaw")){
-			plugin.getConfig().set("config.loginpoint.posyaw", 0.0f);
+		if(!plugin.getConfig().isSet("config.loginpoint."+world+".posyaw")){
+			plugin.getConfig().set("config.loginpoint."+world+".posyaw", 0.0f);
 		}
-		if(!plugin.getConfig().isSet("config.loginpoint.pospitch")){
-			plugin.getConfig().set("config.loginpoint.pospitch", 0.0f);
+		if(!plugin.getConfig().isSet("config.loginpoint."+world+".pospitch")){
+			plugin.getConfig().set("config.loginpoint."+world+".pospitch", 0.0f);
 		}
 		
 		//数据库设置
@@ -93,7 +94,13 @@ public class ConfigDefault {
 		
 		//管理员部分
 		if(!languageConfig.getLanguageConfig().isSet("language.admin.setloginlocationsuccess")){
-			languageConfig.getLanguageConfig().set("language.admin.setloginlocationsuccess", "§2登录地点设置成功。");
+			languageConfig.getLanguageConfig().set("language.admin.setloginlocationsuccess", "§2世界——{world}的登录地点设置成功。");
+		}
+		if(!languageConfig.getLanguageConfig().isSet("language.admin.reloadsuccess")){
+			languageConfig.getLanguageConfig().set("language.admin.reloadsuccess", "§2配置已重载。");
+		}
+		if(!languageConfig.getLanguageConfig().isSet("language.admin.saveconfigsuccess")){
+			languageConfig.getLanguageConfig().set("language.admin.saveconfigsuccess", "§2配置已保存.");
 		}
 		
 		//错误部分
@@ -127,10 +134,44 @@ public class ConfigDefault {
 		
 		//后台部分
 		if(!languageConfig.getLanguageConfig().isSet("language.console.enable")){
-			languageConfig.getLanguageConfig().set("language.console.enable", "插件已加载。");
+			languageConfig.getLanguageConfig().set("language.console.enable", "§2插件已加载。");
 		}
 		if(!languageConfig.getLanguageConfig().isSet("language.console.disable")){
-			languageConfig.getLanguageConfig().set("language.console.disable", "插件已卸载.");
+			languageConfig.getLanguageConfig().set("language.console.disable", "§2插件已卸载.");
+		}
+		if(!languageConfig.getLanguageConfig().isSet("language.console.reloadsuccess")){
+			languageConfig.getLanguageConfig().set("language.console.reloadsuccess", "§2配置已重载。");
+		}
+		if(!languageConfig.getLanguageConfig().isSet("language.console.saveconfigsuccess")){
+			languageConfig.getLanguageConfig().set("language.console.saveconfigsuccess", "§2配置已保存.");
+		}
+		
+		//插件信息
+		if(!languageConfig.getLanguageConfig().isSet("language.help.console")){
+			languageConfig.getLanguageConfig().set("language.help.console", ""
+					+ "login with discuz插件帮助：{newline}"
+					+ "控制台不能使用玩家的指令，如/login 和 /logout。{newline}"
+					+ "/lwd [类型]能对插件进行一定的管理。{newline}"
+					+ "类型为help，获取帮助信息。{newline}"
+					+ "类型为reload，重载配置、语言、用户存档。{newline}"
+					+ "类型为saveconfig，立刻保存所有配置(同上)。");
+		}
+		if(!languageConfig.getLanguageConfig().isSet("language.help.admin")){
+			languageConfig.getLanguageConfig().set("language.help.admin", ""
+					+ "login with discuz插件帮助：{newline}"
+					+ "/login [密码] 登录{newline}"
+					+ "/logout 登出{newline}"
+					+ "/lwd [类型]能对插件进行一定的管理。{newline}"
+					+ "类型为help，获取帮助信息。{newline}"
+					+ "类型为reload，重载配置、语言、用户存档。{newline}"
+					+ "类型为saveconfig，立刻保存所有配置(同上)。");
+		}
+		if(!languageConfig.getLanguageConfig().isSet("language.help.player")){
+			languageConfig.getLanguageConfig().set("language.help.player", ""
+					+ "login with discuz插件帮助：{newline}"
+					+ "/login [密码] 登录{newline}"
+					+ "/logout 登出{newline}"
+					+ "/lwd help 获取帮助信息。");
 		}
 		
 		//保存配置

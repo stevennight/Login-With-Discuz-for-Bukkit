@@ -20,15 +20,15 @@ public class CommandLogin implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
     	
+		//判断是否为玩家
+    	if(sender instanceof Player){
+
+    	}else{
+    		sender.sendMessage(Loginwithdiscuz.languageConfig.getLanguageConfig().getString("language.error.mustplayer"));
+    		return true;
+    	}
+    	
     	if(!Loginwithdiscuz.loginuser.get(sender.getName())){
-
-    		//判断是否为玩家
-        	if(sender instanceof Player){
-
-        	}else{
-        		sender.sendMessage(Loginwithdiscuz.languageConfig.getLanguageConfig().getString("language.error.mustplayer"));
-        		return true;
-        	}
         	
         	//判断参数个数并处理参数
         	String passworduserinput;

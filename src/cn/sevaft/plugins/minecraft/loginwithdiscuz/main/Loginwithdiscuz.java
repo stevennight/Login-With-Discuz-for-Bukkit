@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import cn.sevaft.plugins.minecraft.loginwithdiscuz.command.CommandLWD;
 import cn.sevaft.plugins.minecraft.loginwithdiscuz.command.CommandLogin;
 import cn.sevaft.plugins.minecraft.loginwithdiscuz.command.CommandLogout;
 import cn.sevaft.plugins.minecraft.loginwithdiscuz.command.CommandSetLoginLocation;
@@ -38,6 +39,7 @@ public final class Loginwithdiscuz extends JavaPlugin {
     	this.getCommand("login").setExecutor(new CommandLogin(this));
     	this.getCommand("logout").setExecutor(new CommandLogout(this));
     	this.getCommand("setloginlocal").setExecutor(new CommandSetLoginLocation(this));
+    	this.getCommand("lwd").setExecutor(new CommandLWD(this));
     	
     	getLogger().info(languageConfig.getLanguageConfig().getString("language.console.enable"));
     }

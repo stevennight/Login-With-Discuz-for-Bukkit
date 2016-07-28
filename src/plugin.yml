@@ -11,8 +11,12 @@ commands:
   setloginlocal:
     description: This is a set login position command.Player must a OP.
     usage: |
-      /<command>
+      /<command> (default)
   logout:
     description: This is a logout command.
     usage: |
       /<command>
+  lwd:
+    description: This is a lwd help command.
+    usage: |
+      /<command> [type]

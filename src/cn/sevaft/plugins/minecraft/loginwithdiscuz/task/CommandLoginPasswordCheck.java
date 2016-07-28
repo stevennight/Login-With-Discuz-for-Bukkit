@@ -8,12 +8,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import cn.sevaft.plugins.minecraft.loginwithdiscuz.function.Common;
 import cn.sevaft.plugins.minecraft.loginwithdiscuz.main.Loginwithdiscuz;
 import cn.sevaft.plugins.minecraft.loginwithdiscuz.mysql.Connect;
 
@@ -53,7 +52,6 @@ public class CommandLoginPasswordCheck extends BukkitRunnable {
 					
 					//比较密码
 					if(passwordthelast.equals(passwordindb)){
-						Loginwithdiscuz.loginuser.put(sender.getName(), true);
 						sender.sendMessage(Loginwithdiscuz.languageConfig.getLanguageConfig().getString("language.login.loginsuccess"));
 						String bcm_join=Loginwithdiscuz.languageConfig.getLanguageConfig().getString("language.login.joinboardcast");
 						bcm_join=bcm_join.replace("{username}", sender.getName());
@@ -63,29 +61,14 @@ public class CommandLoginPasswordCheck extends BukkitRunnable {
 				    	Loginwithdiscuz.usertipstask.get(sender.getName()).cancel();
 				    	Loginwithdiscuz.usertipstask.remove(sender.getName());
 				    	
-				    	//固定登录位置。
+				    	//返回玩家最后一次位置。。
 				    	boolean openloginpoint = this.plugin.getConfig().getBoolean("config.loginpoint.open");
 				    	if(openloginpoint){
-				    		boolean issetconfig=Loginwithdiscuz.userConfig.getUserConfig().isSet("Users."+sender.getName()+".posx")&&
-				    				Loginwithdiscuz.userConfig.getUserConfig().isSet("Users."+sender.getName()+".posy")&&
-				    				Loginwithdiscuz.userConfig.getUserConfig().isSet("Users."+sender.getName()+".posz")&&
-				    				Loginwithdiscuz.userConfig.getUserConfig().isSet("Users."+sender.getName()+".posyaw")&&
-				    				Loginwithdiscuz.userConfig.getUserConfig().isSet("Users."+sender.getName()+".pospitch");
-				    		if(issetconfig){
-				    			World world = this.plugin.getServer().getWorld(
-				    					Loginwithdiscuz.userConfig.getUserConfig().getString("Users."+sender.getName()+".world"));
-					    		double posx = Loginwithdiscuz.userConfig.getUserConfig().getDouble("Users."+sender.getName()+".posx");
-					    		double posy = Loginwithdiscuz.userConfig.getUserConfig().getDouble("Users."+sender.getName()+".posy");
-					    		double posz = Loginwithdiscuz.userConfig.getUserConfig().getDouble("Users."+sender.getName()+".posz");
-					    		float posyaw = (float) Loginwithdiscuz.userConfig.getUserConfig().getDouble("Users."+sender.getName()+".posyaw");
-					    		float pospitch = (float) Loginwithdiscuz.userConfig.getUserConfig().getDouble("Users."+sender.getName()+".pospitch");
-					    		Location loc = new Location(world,posx,posy,posz,posyaw,pospitch);
-					    		sender.teleport(loc);
-				    		}else{
-				    			//没有选项直接传送到世界出生点。
-				    			sender.teleport(sender.getWorld().getSpawnLocation());
-				    		}
+				    		sender.teleport(Common.getPlayerLastpos(this.plugin, sender));
 				    	}
+				    	
+				    	//更新玩家登录状态。
+				    	Loginwithdiscuz.loginuser.put(sender.getName(), true);
 					}else{
 						sender.sendMessage(Loginwithdiscuz.languageConfig.getLanguageConfig().getString("language.error.passwordwrong"));
 					}

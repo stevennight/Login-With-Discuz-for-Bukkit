@@ -1,6 +1,5 @@
 package cn.sevaft.plugins.minecraft.loginwithdiscuz.command;
 
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -8,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import cn.sevaft.plugins.minecraft.loginwithdiscuz.function.Common;
 import cn.sevaft.plugins.minecraft.loginwithdiscuz.main.Loginwithdiscuz;
 import cn.sevaft.plugins.minecraft.loginwithdiscuz.task.KickPlayerTask;
 import cn.sevaft.plugins.minecraft.loginwithdiscuz.task.TipsLogin;
@@ -23,16 +23,15 @@ public class CommandLogout implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
     	
-    	if(Loginwithdiscuz.loginuser.get(sender.getName())){
-
-    		//判断是否为玩家
-    		Player player;
-        	if(sender instanceof Player){
-        		player = (Player)sender;
-        	}else{
-        		sender.sendMessage(Loginwithdiscuz.languageConfig.getLanguageConfig().getString("language.error.mustplayer"));
-        		return true;
-        	}
+    	Player player;
+    	if(sender instanceof Player){
+    		player = (Player)sender;
+    	}else{
+    		sender.sendMessage(Loginwithdiscuz.languageConfig.getLanguageConfig().getString("language.error.mustplayer"));
+    		return true;
+    	}
+    	
+    	if(Loginwithdiscuz.loginuser.get(player.getName())){
         	
         	//判断参数个数并处理参数
         	if(args.length==0){
@@ -66,14 +65,7 @@ public class CommandLogout implements CommandExecutor {
         	//固定登录位置。
         	boolean openloginpoint = this.plugin.getConfig().getBoolean("config.loginpoint.open");
         	if(openloginpoint){
-        		Location loc = new Location(this.plugin.getServer().getWorld(
-        				this.plugin.getConfig().getString("config.loginpoint.world")),
-        				this.plugin.getConfig().getDouble("config.loginpoint.posx"),
-        				this.plugin.getConfig().getDouble("config.loginpoint.posy"),
-        				this.plugin.getConfig().getDouble("config.loginpoint.posz"),
-        				(float)this.plugin.getConfig().getDouble("config.loginpoint.posyaw"),
-        				(float)this.plugin.getConfig().getDouble("config.loginpoint.pospitch"));
-        		player.teleport(loc);
+        		player.teleport(Common.getLoginPos(this.plugin,player));
         	}
         	//超时登录踢出玩家
         	int overtime=this.plugin.getConfig().getInt("config.overtime");
