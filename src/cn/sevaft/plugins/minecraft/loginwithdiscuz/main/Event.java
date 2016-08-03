@@ -101,6 +101,9 @@ public class Event implements Listener {
     public void onPlayerQuitEvent(PlayerQuitEvent event){
     	Player player = event.getPlayer();
     	
+    	//取消登出信息提示。
+    	event.setQuitMessage("");
+    	
     	if(Loginwithdiscuz.loginuser.get(player.getName())){
     		//保存玩家退出时候的登录信息。(IP,退出时间)
     		Loginwithdiscuz.userConfig.getUserConfig().set("Users."+player.getName()+".LastIp", player.getAddress().getAddress().getHostAddress());
@@ -123,6 +126,11 @@ public class Event implements Listener {
         	Loginwithdiscuz.userConfig.saveUserConfig();
         	//设置用户为未登录状态
         	Loginwithdiscuz.loginuser.put(player.getName(),false);
+        	
+        	//公告玩家登出
+        	String bcm_logout=Loginwithdiscuz.languageConfig.getLanguageConfig().getString("language.login.logoutboardcast");
+        	bcm_logout=bcm_logout.replace("{username}", player.getName());
+			plugin.getServer().broadcastMessage(bcm_logout);
     	}
     }
     

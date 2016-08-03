@@ -34,41 +34,93 @@ public class CommandLoginPasswordCheck extends BukkitRunnable {
     	Connection con;
     	con=connect.getConnection(this.plugin);
     	if(con != null){
-    		String form = plugin.getConfig().getString("config.mysql.form");
-    		String query = "SELECT password,salt FROM `"+form+"` WHERE username=?";
+    		String formpre = plugin.getConfig().getString("config.mysql.formpre");
+    		String query = "SELECT uid,password,salt FROM `"+formpre+"ucenter_members` WHERE username=?";
     		try {
     			PreparedStatement sql=con.prepareStatement(query);
         		sql.setString(1, sender.getName());
         		ResultSet result=sql.executeQuery();
 				if(result.next()){
-					String passwordindb=result.getString(1);
-					String salt = result.getString(2);
+					int uid = result.getInt(1);
+					String passwordindb=result.getString(2);
+					String salt = result.getString(3);
 					
 					//密码加密运算。
 					MessageDigest md5 =MessageDigest.getInstance("MD5");
-					String password=byteArrayToHex(md5.digest(this.passworduserinput.getBytes("utf-8"))).toLowerCase();
+					String password=byteArrayToHex(md5.digest(this.passworduserinput.getBytes("utf-8"))).toLowerCase();//一定要tolowercase
 					String passwordaddsalt=password+salt;
 					String passwordthelast=byteArrayToHex(md5.digest(passwordaddsalt.getBytes("utf-8"))).toLowerCase();
 					
 					//比较密码
 					if(passwordthelast.equals(passwordindb)){
-						sender.sendMessage(Loginwithdiscuz.languageConfig.getLanguageConfig().getString("language.login.loginsuccess"));
-						String bcm_join=Loginwithdiscuz.languageConfig.getLanguageConfig().getString("language.login.joinboardcast");
-						bcm_join=bcm_join.replace("{username}", sender.getName());
-						plugin.getServer().broadcastMessage(bcm_join);
-						Loginwithdiscuz.userkicktask.get(sender.getName()).cancel();
-				    	Loginwithdiscuz.userkicktask.remove(sender.getName());
-				    	Loginwithdiscuz.usertipstask.get(sender.getName()).cancel();
-				    	Loginwithdiscuz.usertipstask.remove(sender.getName());
-				    	
-				    	//返回玩家最后一次位置。。
-				    	boolean openloginpoint = this.plugin.getConfig().getBoolean("config.loginpoint.open");
-				    	if(openloginpoint){
-				    		sender.teleport(Common.getPlayerLastpos(this.plugin, sender));
-				    	}
-				    	
-				    	//更新玩家登录状态。
-				    	Loginwithdiscuz.loginuser.put(sender.getName(), true);
+			    		
+						//获取手机邮箱的是否激活
+						boolean mustemail = plugin.getConfig().getBoolean("config.account.mustemail");
+						boolean isemail = true;
+						boolean mustmobile = plugin.getConfig().getBoolean("config.account.mustmobile");
+						boolean ismobile = true;
+						if(mustemail){
+							//获取是否激活邮箱
+				    		String query2 = "SELECT emailstatus FROM `"+formpre+"common_member` WHERE uid=?";
+				    		PreparedStatement sql2=con.prepareStatement(query2);
+			        		sql2.setInt(1, uid);
+			        		ResultSet result2=sql2.executeQuery();
+							if(result2.next()){
+								isemail = result2.getBoolean(1);
+							}else{
+								isemail = false;
+							}
+						}
+						if(mustmobile){
+							//获取是否激活邮箱
+				    		String query2 = "SELECT status FROM `"+formpre+"mobilebind_user` WHERE uid=?";
+				    		PreparedStatement sql2=con.prepareStatement(query2);
+			        		sql2.setInt(1, uid);
+			        		ResultSet result2=sql2.executeQuery();
+							if(result2.next()){
+								ismobile = true;
+							}else{
+								ismobile = false;
+							}
+						}
+						
+						if(isemail && ismobile){
+							
+							//登录成功
+							sender.sendMessage(Loginwithdiscuz.languageConfig.getLanguageConfig().getString("language.login.loginsuccess"));
+							String bcm_join=Loginwithdiscuz.languageConfig.getLanguageConfig().getString("language.login.joinboardcast");
+							bcm_join=bcm_join.replace("{username}", sender.getName());
+							plugin.getServer().broadcastMessage(bcm_join);
+							Loginwithdiscuz.userkicktask.get(sender.getName()).cancel();
+					    	Loginwithdiscuz.userkicktask.remove(sender.getName());
+					    	Loginwithdiscuz.usertipstask.get(sender.getName()).cancel();
+					    	Loginwithdiscuz.usertipstask.remove(sender.getName());
+					    	
+					    	//返回玩家最后一次位置。。
+					    	boolean openloginpoint = this.plugin.getConfig().getBoolean("config.loginpoint.open");
+					    	if(openloginpoint){
+					    		sender.teleport(Common.getPlayerLastpos(this.plugin, sender));
+					    	}
+					    	
+					    	//更新玩家登录状态。
+					    	Loginwithdiscuz.loginuser.put(sender.getName(), true);
+							
+						}else{
+							
+							String mustquest = Loginwithdiscuz.languageConfig.getLanguageConfig().getString("language.login.mustquest");
+							String mustemailtip = Loginwithdiscuz.languageConfig.getLanguageConfig().getString("language.login.mustemail");
+							String mustemobiletip = Loginwithdiscuz.languageConfig.getLanguageConfig().getString("language.login.mustmobile");
+							String changeword = "";
+							if(!isemail){
+								changeword += mustemailtip;
+							}
+							if(!ismobile){
+								changeword += mustemobiletip;
+							}
+							mustquest = mustquest.replace("{quests}",changeword);
+							sender.sendMessage(mustquest);
+						}
+						
 					}else{
 						sender.sendMessage(Loginwithdiscuz.languageConfig.getLanguageConfig().getString("language.error.passwordwrong"));
 					}

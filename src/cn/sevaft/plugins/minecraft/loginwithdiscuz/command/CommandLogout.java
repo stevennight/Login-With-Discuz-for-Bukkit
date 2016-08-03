@@ -79,6 +79,9 @@ public class CommandLogout implements CommandExecutor {
         	//清除用户登录状态信息，禁止自动登录。
         	Loginwithdiscuz.loginuser.put(player.getName(),false);
         	sender.sendMessage(Loginwithdiscuz.languageConfig.getLanguageConfig().getString("language.login.logoutsuccess"));
+        	String bcm_logout=Loginwithdiscuz.languageConfig.getLanguageConfig().getString("language.login.logoutboardcast");
+        	bcm_logout=bcm_logout.replace("{username}", sender.getName());
+			plugin.getServer().broadcastMessage(bcm_logout);
     	}else{
     		sender.sendMessage(Loginwithdiscuz.languageConfig.getLanguageConfig().getString("language.error.nologin"));
     	}

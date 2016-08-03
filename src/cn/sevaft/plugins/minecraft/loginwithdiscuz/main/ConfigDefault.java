@@ -63,8 +63,15 @@ public class ConfigDefault {
 		if(!plugin.getConfig().isSet("config.mysql.password")){
 			plugin.getConfig().set("config.mysql.password", "");
 		}
-		if(!plugin.getConfig().isSet("config.mysql.form")){
-			plugin.getConfig().set("config.mysql.form", "");
+		if(!plugin.getConfig().isSet("config.mysql.formpre")){
+			plugin.getConfig().set("config.mysql.formpre", "pre_");
+		}
+		//账号要求(是否要绑定手机和邮箱)
+		if(!plugin.getConfig().isSet("config.account.mustemail")){
+			plugin.getConfig().set("config.account.mustemail", true);
+		}
+		if(!plugin.getConfig().isSet("config.account.mustmobile")){
+			plugin.getConfig().set("config.account.mustmobile", false);
 		}
 		
 		//保存配置
@@ -85,11 +92,23 @@ public class ConfigDefault {
 		if(!languageConfig.getLanguageConfig().isSet("language.login.joinboardcast")){
 			languageConfig.getLanguageConfig().set("language.login.joinboardcast", "§6{username} 加入了游戏。");
 		}
+		if(!languageConfig.getLanguageConfig().isSet("language.login.logoutboardcast")){
+			languageConfig.getLanguageConfig().set("language.login.logoutboardcast", "§6{username} 离开了游戏。");
+		}
 		if(!languageConfig.getLanguageConfig().isSet("language.login.autologin")){
 			languageConfig.getLanguageConfig().set("language.login.autologin", "§2欢迎回来，已自动登录。");
 		}
 		if(!languageConfig.getLanguageConfig().isSet("language.login.logoutsuccess")){
 			languageConfig.getLanguageConfig().set("language.login.logoutsuccess", "§2成功登出。");
+		}
+		if(!languageConfig.getLanguageConfig().isSet("language.login.mustquest")){//必须绑定手机邮箱提示。
+			languageConfig.getLanguageConfig().set("language.login.mustquest", "§4您的账号必须绑定并激活§6{quests}§4才能登录游戏。");
+		}
+		if(!languageConfig.getLanguageConfig().isSet("language.login.mustemail")){//必须绑定手机邮箱提示。
+			languageConfig.getLanguageConfig().set("language.login.mustemail", "【邮箱】");
+		}
+		if(!languageConfig.getLanguageConfig().isSet("language.login.mustmobile")){//必须绑定手机邮箱提示。
+			languageConfig.getLanguageConfig().set("language.login.mustmobile", "【手机】");
 		}
 		
 		//管理员部分
@@ -154,7 +173,8 @@ public class ConfigDefault {
 					+ "/lwd [类型]能对插件进行一定的管理。{newline}"
 					+ "类型为help，获取帮助信息。{newline}"
 					+ "类型为reload，重载配置、语言、用户存档。{newline}"
-					+ "类型为saveconfig，立刻保存所有配置(同上)。");
+					+ "类型为saveconfig，立刻保存所有配置(同上)。{newline}"
+					+ "类型为kickautologin，清除玩家自动登录信息，下次玩家登录需要使用密码登录。");
 		}
 		if(!languageConfig.getLanguageConfig().isSet("language.help.admin")){
 			languageConfig.getLanguageConfig().set("language.help.admin", ""
@@ -164,7 +184,8 @@ public class ConfigDefault {
 					+ "/lwd [类型]能对插件进行一定的管理。{newline}"
 					+ "类型为help，获取帮助信息。{newline}"
 					+ "类型为reload，重载配置、语言、用户存档。{newline}"
-					+ "类型为saveconfig，立刻保存所有配置(同上)。");
+					+ "类型为saveconfig，立刻保存所有配置(同上)。{newline}"
+					+ "类型为kickautologin，清除玩家自动登录信息，下次玩家登录需要使用密码登录。");
 		}
 		if(!languageConfig.getLanguageConfig().isSet("language.help.player")){
 			languageConfig.getLanguageConfig().set("language.help.player", ""
@@ -172,6 +193,12 @@ public class ConfigDefault {
 					+ "/login [密码] 登录{newline}"
 					+ "/logout 登出{newline}"
 					+ "/lwd help 获取帮助信息。");
+		}
+		if(!languageConfig.getLanguageConfig().isSet("language.help.kickautologin.playernotfound")){
+			languageConfig.getLanguageConfig().set("language.help.kickautologin.playernotfound", "玩家不存在！");
+		}
+		if(!languageConfig.getLanguageConfig().isSet("language.help.kickautologin.success")){
+			languageConfig.getLanguageConfig().set("language.help.kickautologin.success", "已重置玩家{username}的自动登录。如果玩家不在线，下次玩家登录必须重新进行密码登录，否则无效。");
 		}
 		
 		//保存配置
