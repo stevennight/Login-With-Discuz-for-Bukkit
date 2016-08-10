@@ -34,6 +34,8 @@ public class Event implements Listener {
     	//取消进入之后显示的黄色字体加入提示。
     	event.setJoinMessage("");
     	
+    	//设置登录变量(未登录)
+    	Loginwithdiscuz.loginuser.put(player.getName(),false);
     	//自动登录（免登录）
     	//无用户登录状态信息，禁止自动登录。
     	if(Loginwithdiscuz.loginuser.containsKey(player.getName())){
@@ -57,26 +59,10 @@ public class Event implements Listener {
 							
 							//不执行下面超时踢出等指令。不设置任务。
 							return;
-		    			}else{
-		    				//设置登录变量(未登录)
-		                	Loginwithdiscuz.loginuser.put(player.getName(),false);
 		    			}
-		    		}else{
-		    			//设置登录变量(未登录)
-		            	Loginwithdiscuz.loginuser.put(player.getName(),false);
 		    		}
-	    		}else{
-	    			//设置登录变量(未登录)
-	            	Loginwithdiscuz.loginuser.put(player.getName(),false);
 	    		}
-	    	}else{
-	        	//设置登录变量(未登录)
-	        	Loginwithdiscuz.loginuser.put(player.getName(),false);
 	    	}
-    	}
-    	else{
-    		//设置登录变量(未登录)
-        	Loginwithdiscuz.loginuser.put(player.getName(),false);
     	}
     	
     	//固定登录位置。
@@ -93,7 +79,7 @@ public class Event implements Listener {
     	int tipstime=(int) this.plugin.getConfig().getInt("config.tipstime");
     	BukkitTask tipslogin = new TipsLogin(player,overtime).runTaskTimer(this.plugin, 0, 20*tipstime);
     	Loginwithdiscuz.usertipstask.put(player.getName(), tipslogin);
-    	
+    		
     }
     
     //退出登录取消在线状态。
